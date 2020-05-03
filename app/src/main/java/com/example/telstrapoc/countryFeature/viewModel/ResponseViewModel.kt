@@ -1,16 +1,23 @@
 package com.example.telstrapoc.countryFeature.viewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.telstrapoc.countryFeature.model.CountryFeature
+import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.telstrapoc.countryFeature.CountryFeatureUsecase
 import com.example.telstrapoc.countryFeature.model.ResponseModel
+import com.example.telstrapoc.executer.IExecuterThread
+import com.example.telstrapoc.executer.UIThread
+import com.example.telstrapoc.module.ThreadModule
+import rx.Subscriber
 
 
 class ResponseViewModel : ViewModel{
 
     var title: String = " "
-    var rows: ArrayList<CountryFeature> = ArrayList<CountryFeature>()
-
+    var rows: ArrayList<CountryFeatureViewModel> = ArrayList<CountryFeatureViewModel>()
+   // lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     constructor() : super()
 
     constructor(responseModel : ResponseModel) : super() {
@@ -18,62 +25,44 @@ class ResponseViewModel : ViewModel{
         this.rows = responseModel.rows
     }
 
+    var isLoading= MutableLiveData<Boolean>()
     var titleLiveData = MutableLiveData<String>()
     var rowsLiveData = MutableLiveData<ArrayList<CountryFeatureViewModel>>()
+    val uiThread: UIThread = ThreadModule().providePostExecutionThread()
+    val executorThread: IExecuterThread = ThreadModule().provideExecutorThread()
+
+    val countryFeatureUsecase: CountryFeatureUsecase = CountryFeatureUsecase(executorThread,uiThread)
+    var countryFeatureSubscriber: CountryFeatureSubscriber = CountryFeatureSubscriber()
 
     fun getCountryFeature() : MutableLiveData<ArrayList<CountryFeatureViewModel>>{
-
-        val  feature1 = CountryFeatureViewModel(CountryFeature("Beavers",
-            "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-            "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg"))
-
-        val  feature2 = CountryFeatureViewModel(CountryFeature("Beavers",
-            "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-            "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg"))
-
-        val  feature3 = CountryFeatureViewModel(CountryFeature("Beavers",
-            "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-            "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg"))
-
-        var countryFeatureList : ArrayList<CountryFeatureViewModel> = ArrayList<CountryFeatureViewModel>()
-
-        countryFeatureList.add(feature1)
-        countryFeatureList.add(feature2)
-        countryFeatureList.add(feature3)
-        rowsLiveData.value = countryFeatureList
-
+        isLoading!!.value = true
+        //mSwipeRefreshLayout.isRefreshing = true
+        countryFeatureUsecase.execute(countryFeatureSubscriber)
         return rowsLiveData
     }
 
+    /*
+   Subscriber to show image list on UI
+   as soon as image list downloads from server it get notifies and show list of images on UI
+    */
+    inner class CountryFeatureSubscriber : Subscriber<ResponseViewModel>() {
 
-    /*var responseLiveData = MutableLiveData<ResponseViewModel>()
+        override fun onCompleted() {}
+        override fun onError(e: Throwable) {
+            isLoading!!.value = false
+            //mSwipeRefreshLayout.isRefreshing = false
+            Log.e("TelstraPoc",e.toString())
+        }
+        override fun onNext(resDetails: ResponseViewModel) {
+            rowsLiveData.value = resDetails.rows
+            isLoading!!.value = false
+           // mSwipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+     override fun onCleared() {
+        super.onCleared()
+    }
 
 
-    fun getcountryFeature():MutableLiveData<ResponseViewModel>{
-
-       val  feature1 = CountryFeature("Beavers",
-           "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-           "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg")
-
-        val  feature2 = CountryFeature("Beavers",
-            "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-            "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg")
-
-        val  feature3 = CountryFeature("Beavers",
-            "Beavers are second only to humans in their ability to manipulate and change their environment. They can measure up to 1.3 metres long. A group of beavers is called a colony",
-            "http://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/American_Beaver.jpg/220px-American_Beaver.jpg")
-
-        var countryFeatureList : ArrayList<CountryFeature> = ArrayList<CountryFeature>()
-
-        countryFeatureList.add(feature1)
-        countryFeatureList.add(feature2)
-        countryFeatureList.add(feature3)
-
-        val resModel : ResponseModel = ResponseModel("About Canada",countryFeatureList)
-
-        responseLiveData.value = ResponseViewModel(resModel)
-
-        return responseLiveData
-
-    }*/
 }

@@ -20,7 +20,7 @@
     android:paddingVertical="@dimen/dimen_5"
     android:elevation="3dp"
     android:layout_margin="@dimen/dimen_5"
-    app:cardCornerRadius="@dimen/dimen_5">-->
+    app:cardCornerRadius="@dimen/dimen_5">
 
     <LinearLayout
         android:layout_marginHorizontal="@dimen/dimen_10"
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="@{countryFeatureViewModel.title}"
+                android:text="@{countryFeatureViewModel.title!=null?countryFeatureViewModel.title:`No Title`}"
                 android:layout_centerVertical="true" />
             <TextView
                 android:layout_marginTop="@dimen/dimen_10"
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_description"
-                android:text="@{countryFeatureViewModel.description}"
+                android:text="@{countryFeatureViewModel.description!= null ? countryFeatureViewModel.description : `No Description`}"
                 android:layout_centerVertical="true" />
         </LinearLayout>
         <ImageView

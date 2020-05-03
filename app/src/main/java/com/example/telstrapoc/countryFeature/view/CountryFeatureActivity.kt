@@ -29,11 +29,11 @@ class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLa
         setSupportActionBar(toolbar)
 
         rvCountryFeature = findViewById(R.id.rv_country_feature)as RecyclerView
-        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh) as SwipeRefreshLayout
-        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh) as SwipeRefreshLayout
-        mSwipeRefreshLayout.setOnRefreshListener(this)
+       mSwipeRefreshLayout = findViewById(R.id.swipe_refresh) as SwipeRefreshLayout
+       mSwipeRefreshLayout.setOnRefreshListener(this)
 
         responseViewModel  = ViewModelProviders.of(this).get(ResponseViewModel::class.java)
+       // responseViewModel!!.mSwipeRefreshLayout = mSwipeRefreshLayout
         loadDatainRecyclerView()
     }
 
@@ -47,6 +47,5 @@ class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLa
 
     override fun onRefresh() {
         mSwipeRefreshLayout.isRefreshing=false
-        loadDatainRecyclerView()
     }
 }
