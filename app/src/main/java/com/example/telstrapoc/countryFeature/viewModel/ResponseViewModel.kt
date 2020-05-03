@@ -1,8 +1,6 @@
 package com.example.telstrapoc.countryFeature.viewModel
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.telstrapoc.countryFeature.CountryFeatureUsecase
@@ -12,7 +10,9 @@ import com.example.telstrapoc.executer.UIThread
 import com.example.telstrapoc.module.ThreadModule
 import com.example.telstrapoc.utils.NetworkConnection
 import rx.Subscriber
-
+/*
+View Model class for Response model
+ */
 
 class ResponseViewModel : ViewModel{
 

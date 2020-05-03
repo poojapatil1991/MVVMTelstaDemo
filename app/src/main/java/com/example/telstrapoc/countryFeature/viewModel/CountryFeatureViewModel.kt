@@ -2,7 +2,9 @@ package com.example.telstrapoc.countryFeature.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.example.telstrapoc.countryFeature.model.CountryFeature
-
+/*
+View model for the Country feature model
+ */
 class CountryFeatureViewModel : ViewModel {
 
     var title: String = ""

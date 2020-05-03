@@ -1,12 +1,9 @@
 package com.example.telstrapoc.countryFeature.view
 
 import android.app.Dialog
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +15,9 @@ import com.example.telstrapoc.countryFeature.viewModel.CountryFeatureViewModel
 import com.example.telstrapoc.countryFeature.viewModel.ResponseViewModel
 import com.example.telstrapoc.utils.CountryFeatureApplication
 import kotlinx.android.synthetic.main.activity_country_feature.*
-
+/*
+Launcher Activity, Main activity to show country feature data on activity.
+ */
 
 class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLayout.OnRefreshListener {
 
@@ -43,8 +42,6 @@ class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLa
         mDialog.setCancelable(false)
         mDialog.setCanceledOnTouchOutside(false)
 
-
-
         responseViewModel  = ViewModelProviders.of(this).get(ResponseViewModel::class.java)
         loadDatainRecyclerView()
 
@@ -54,6 +51,7 @@ class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLa
         responseViewModel!!.titleLiveData.observe(this, Observer { t:String->showTitle(t)})
     }
 
+    //Function to show country feature in recycler view
     fun loadDatainRecyclerView(){
         responseViewModel!!.getCountryFeature().observe(this, Observer{
                 it:ArrayList<CountryFeatureViewModel>->countryFeatureAdapter= CountryFeatureAdapter(it)
@@ -91,6 +89,7 @@ class CountryFeatureActivity : AppCompatActivity(),LifecycleOwner,SwipeRefreshLa
             mDialog.hide()
         }
     }
+    //Function to show title in action bar
     fun showTitle(title:String){
         supportActionBar!!.title = title
     }

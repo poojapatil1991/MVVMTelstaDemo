@@ -1,19 +1,16 @@
 package com.example.telstrapoc.countryFeature.view
 
-import android.renderscript.ScriptGroup
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.telstrapoc.R
-import com.example.telstrapoc.countryFeature.model.CountryFeature
 import com.example.telstrapoc.countryFeature.viewModel.CountryFeatureViewModel
-import com.example.telstrapoc.countryFeature.viewModel.ResponseViewModel
 import com.example.telstrapoc.databinding.CountryFeatureBinding
 import com.example.telstrapoc.utils.GlideImageDownloader
+/*
+Adapter for country feature recycler view
+ */
 
 class CountryFeatureAdapter (private val mCountryFeatureList : ArrayList<CountryFeatureViewModel>) : RecyclerView.Adapter<CountryFeatureAdapter.ViewHolder>() {
 

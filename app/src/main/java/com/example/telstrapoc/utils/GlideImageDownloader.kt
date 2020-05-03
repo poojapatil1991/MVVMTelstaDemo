@@ -1,12 +1,13 @@
 package com.example.telstrapoc.utils
 
-import android.content.Context
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.telstrapoc.R
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-
+/*Class to dowload images from server
+Used Glide library, it provides lazy loading and caching
+ */
 object GlideImageDownloader {
     @JvmStatic
     @BindingAdapter("android:src")

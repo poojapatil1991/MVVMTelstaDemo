@@ -1,7 +1,7 @@
 package com.example.telstrapoc.countryFeature.model
-
-import java.util.*
-
+/*
+Model to retrive Country Features from API
+ */
 class CountryFeature  {
     var title: String = ""
     var description: String = ""
