@@ -1,15 +1,16 @@
 package com.example.telstrapoc.countryFeature.viewModel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.telstrapoc.countryFeature.CountryFeatureUsecase
 import com.example.telstrapoc.countryFeature.model.ResponseModel
 import com.example.telstrapoc.executer.IExecuterThread
 import com.example.telstrapoc.executer.UIThread
 import com.example.telstrapoc.module.ThreadModule
+import com.example.telstrapoc.utils.NetworkConnection
 import rx.Subscriber
 
 
@@ -17,7 +18,6 @@ class ResponseViewModel : ViewModel{
 
     var title: String = " "
     var rows: ArrayList<CountryFeatureViewModel> = ArrayList<CountryFeatureViewModel>()
-   // lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     constructor() : super()
 
     constructor(responseModel : ResponseModel) : super() {
@@ -25,19 +25,25 @@ class ResponseViewModel : ViewModel{
         this.rows = responseModel.rows
     }
 
-    var isLoading= MutableLiveData<Boolean>()
+    var loadingError= MutableLiveData<Boolean>()
+    var loading= MutableLiveData<Boolean>()
     var titleLiveData = MutableLiveData<String>()
     var rowsLiveData = MutableLiveData<ArrayList<CountryFeatureViewModel>>()
     val uiThread: UIThread = ThreadModule().providePostExecutionThread()
     val executorThread: IExecuterThread = ThreadModule().provideExecutorThread()
 
     val countryFeatureUsecase: CountryFeatureUsecase = CountryFeatureUsecase(executorThread,uiThread)
-    var countryFeatureSubscriber: CountryFeatureSubscriber = CountryFeatureSubscriber()
 
     fun getCountryFeature() : MutableLiveData<ArrayList<CountryFeatureViewModel>>{
-        isLoading!!.value = true
-        //mSwipeRefreshLayout.isRefreshing = true
-        countryFeatureUsecase.execute(countryFeatureSubscriber)
+        if (NetworkConnection.isNetworkConnected()) {
+            loadingError!!.value = false
+            loading!!.value = true
+            countryFeatureUsecase.execute(CountryFeatureSubscriber())
+        }else{
+            loading!!.value = false
+            loadingError!!.value = true
+        }
+
         return rowsLiveData
     }
 
@@ -49,20 +55,14 @@ class ResponseViewModel : ViewModel{
 
         override fun onCompleted() {}
         override fun onError(e: Throwable) {
-            isLoading!!.value = false
-            //mSwipeRefreshLayout.isRefreshing = false
+            loading!!.value = false
+            loadingError!!.value = true
             Log.e("TelstraPoc",e.toString())
         }
         override fun onNext(resDetails: ResponseViewModel) {
             rowsLiveData.value = resDetails.rows
-            isLoading!!.value = false
-           // mSwipeRefreshLayout.isRefreshing = false
+            loadingError!!.value = false
+            loading!!.value = false
         }
     }
-
-     override fun onCleared() {
-        super.onCleared()
-    }
-
-
 }

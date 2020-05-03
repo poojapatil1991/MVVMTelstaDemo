@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:configChanges="orientation|screenSize"
-            android:name=".countryFeature.view.CountryFeatureActivity">
+            android:name=".countryFeature.view.CountryFeatureActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

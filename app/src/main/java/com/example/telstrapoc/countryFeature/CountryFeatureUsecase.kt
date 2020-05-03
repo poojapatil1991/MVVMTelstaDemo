@@ -16,7 +16,4 @@ class CountryFeatureUsecase (executorThreadI : IExecuterThread, postExecuterThre
     override fun createObservable(): Observable<ResponseViewModel> {
         return apiRequest!!.getCountryFeatureList()
     }
-    fun refresh(){
-
-    }
 }

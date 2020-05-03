@@ -21,7 +21,6 @@ class CountryFeatureAdapter (private val mCountryFeatureList : ArrayList<Country
     lateinit var glideImageDownloader: GlideImageDownloader
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        //return ViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.country_frature_card, viewGroup, false))
         val inflater = LayoutInflater.from(viewGroup.context)
         val countryFeatureBinding: CountryFeatureBinding = DataBindingUtil.inflate(inflater,R.layout.country_frature_card,viewGroup,false)
 
@@ -29,11 +28,6 @@ class CountryFeatureAdapter (private val mCountryFeatureList : ArrayList<Country
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-       /* glideImageDownloader = GlideImageDownloader()
-        val mGeneralInfoObj: CountryFeature = mCountryFeatureList[position]
-        viewHolder.mTvTitle?.text = mGeneralInfoObj.title
-        viewHolder.mTvDescription?.text = mGeneralInfoObj.description
-        glideImageDownloader.downloadImage(viewHolder.mIvPhoto,mGeneralInfoObj.imageHref)*/
         val countryFeatureViewModel = mCountryFeatureList[position]
         viewHolder.Bind(countryFeatureViewModel)
     }
@@ -44,7 +38,6 @@ class CountryFeatureAdapter (private val mCountryFeatureList : ArrayList<Country
     }
     // View holder representing single row in list
     class ViewHolder (val countryFeatureBinding: CountryFeatureBinding) : RecyclerView.ViewHolder(countryFeatureBinding.root) {
-        // Holds the TextView that will add each animal to
 
         fun Bind(countryFeatureViewModel: CountryFeatureViewModel){
             this.countryFeatureBinding.countryFeatureViewModel =countryFeatureViewModel

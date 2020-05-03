@@ -4,13 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data class="ResponseViewModelBinding">
-        <import type="android.view.View" />
-        <variable
-            name="responseViewModel"
-            type="com.example.telstrapoc.countryFeature.viewModel.ResponseViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,9 +17,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id = "@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:refreshing = "@{responseViewModel.isLoading()}"
-            app:onRefreshListener="@{() -> responseViewModel.getCountryFeature()}">
+            android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_country_feature"
                 android:layout_width="match_parent"
