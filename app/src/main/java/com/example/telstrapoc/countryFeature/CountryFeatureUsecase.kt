@@ -7,12 +7,13 @@ import com.example.telstrapoc.module.ApiModule
 import com.example.telstrapoc.utils.ApiInterface
 import com.example.telstrapoc.utils.UseCase
 import rx.Observable
+
 /*
 Usecase to fetch the data from the API
  */
-class CountryFeatureUsecase (executorThreadI : IExecuterThread, postExecuterThread: UIThread)
-    : UseCase<ResponseViewModel>(executorThreadI,postExecuterThread) {
-    var apiRequest: ApiInterface? =  ApiModule().provideAllApi()
+class CountryFeatureUsecase(executorThreadI: IExecuterThread, postExecuterThread: UIThread) :
+    UseCase<ResponseViewModel>(executorThreadI, postExecuterThread) {
+    private var apiRequest: ApiInterface? = ApiModule().provideAllApi()
 
     override fun createObservable(): Observable<ResponseViewModel> {
         return apiRequest!!.getCountryFeatureList()

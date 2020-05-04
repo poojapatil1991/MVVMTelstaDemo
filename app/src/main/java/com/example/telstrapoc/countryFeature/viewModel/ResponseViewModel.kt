@@ -4,44 +4,41 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.telstrapoc.countryFeature.CountryFeatureUsecase
-import com.example.telstrapoc.countryFeature.model.ResponseModel
 import com.example.telstrapoc.executer.IExecuterThread
 import com.example.telstrapoc.executer.UIThread
 import com.example.telstrapoc.module.ThreadModule
 import com.example.telstrapoc.utils.NetworkConnection
 import rx.Subscriber
+
 /*
 View Model class for Response model
  */
 
-class ResponseViewModel : ViewModel{
+class ResponseViewModel : ViewModel {
 
-    var title: String = " "
-    var rows: ArrayList<CountryFeatureViewModel> = ArrayList<CountryFeatureViewModel>()
+    private var title: String = " "
+    var rows: ArrayList<CountryFeatureViewModel> = ArrayList()
+
     constructor() : super()
 
-    constructor(responseModel : ResponseModel) : super() {
-        this.title = responseModel.title
-        this.rows = responseModel.rows
-    }
-
-    var loadingError= MutableLiveData<Boolean>()
-    var loading= MutableLiveData<Boolean>()
+    var loadingError = MutableLiveData<Boolean>()
+    var loading = MutableLiveData<Boolean>()
     var titleLiveData = MutableLiveData<String>()
     var rowsLiveData = MutableLiveData<ArrayList<CountryFeatureViewModel>>()
-    val uiThread: UIThread = ThreadModule().providePostExecutionThread()
-    val executorThread: IExecuterThread = ThreadModule().provideExecutorThread()
+    private val uiThread: UIThread = ThreadModule().providePostExecutionThread()
+    private val executorThread: IExecuterThread = ThreadModule().provideExecutorThread()
 
-    val countryFeatureUsecase: CountryFeatureUsecase = CountryFeatureUsecase(executorThread,uiThread)
+    private val countryFeatureUsecase: CountryFeatureUsecase =
+        CountryFeatureUsecase(executorThread, uiThread)
 
-    fun getCountryFeature() : MutableLiveData<ArrayList<CountryFeatureViewModel>>{
+    fun getCountryFeature(): MutableLiveData<ArrayList<CountryFeatureViewModel>> {
         if (NetworkConnection.isNetworkConnected()) {
-            loadingError!!.value = false
-            loading!!.value = true
+            loadingError.value = false
+            loading.value = true
             countryFeatureUsecase.execute(CountryFeatureSubscriber())
-        }else{
-            loading!!.value = false
-            loadingError!!.value = true
+        } else {
+            loading.value = false
+            loadingError.value = true
         }
 
         return rowsLiveData
@@ -55,14 +52,16 @@ class ResponseViewModel : ViewModel{
 
         override fun onCompleted() {}
         override fun onError(e: Throwable) {
-            loading!!.value = false
-            loadingError!!.value = true
-            Log.e("TelstraPoc",e.toString())
+            loading.value = false
+            loadingError.value = true
+            Log.e("TelstraPoc", e.toString())
         }
+
         override fun onNext(resDetails: ResponseViewModel) {
             rowsLiveData.value = resDetails.rows
-            loadingError!!.value = false
-            loading!!.value = false
+            titleLiveData.value = resDetails.title
+            loadingError.value = false
+            loading.value = false
         }
     }
 }

@@ -8,19 +8,20 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
 /*
 Creates global Instance of retrofit to call the API
  */
-class ApiModule  {
+class ApiModule {
 
-    var retrofit: Retrofit? = null
-    val base_url = "https://dl.dropboxusercontent.com/"
+    private var retrofit: Retrofit? = null
+    private val baseUrl = "https://dl.dropboxusercontent.com/"
 
     // function returns instance of retrofit
-    fun provideApiRetrofit(): Retrofit? {
+    private fun provideApiRetrofit(): Retrofit? {
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
-                .baseUrl(base_url)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(provideOkHttpClient())
@@ -28,8 +29,9 @@ class ApiModule  {
         }
         return retrofit
     }
+
     // function returns the instance of OkHttpClient
-    fun provideOkHttpClient(): OkHttpClient? {
+    private fun provideOkHttpClient(): OkHttpClient? {
         val builder = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -44,7 +46,7 @@ class ApiModule  {
     }
 
     // function returns the instance of HttpLoggingInterceptor
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor? {
+    private fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor? {
         val logging = HttpLoggingInterceptor()
         // set your desired log level
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -52,7 +54,7 @@ class ApiModule  {
     }
 
     // Function returns the instance of retrofit
-     fun provideAllApi(): ApiInterface? {
+    fun provideAllApi(): ApiInterface? {
         return provideApiRetrofit()!!.create(ApiInterface::class.java)
     }
 
