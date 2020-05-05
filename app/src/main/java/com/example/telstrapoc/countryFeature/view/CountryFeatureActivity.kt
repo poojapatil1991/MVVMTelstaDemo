@@ -13,6 +13,7 @@ import com.example.telstrapoc.R
 import com.example.telstrapoc.countryFeature.viewModel.CountryFeatureViewModel
 import com.example.telstrapoc.countryFeature.viewModel.ResponseViewModel
 import com.example.telstrapoc.utils.CountryFeatureApplication
+import com.example.telstrapoc.utils.NetworkConnection
 import kotlinx.android.synthetic.main.activity_country_feature.*
 import kotlinx.android.synthetic.main.content_country_feature.*
 
@@ -41,7 +42,6 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
 
         responseViewModel = ViewModelProviders.of(this).get(ResponseViewModel::class.java)
         loadDataInRecyclerView()
-
         responseViewModel!!.loadingError.observe(this, Observer { t: Boolean -> showError(t) })
 
         responseViewModel!!.loading.observe(this, Observer { t: Boolean -> showLoading(t) })
@@ -61,16 +61,21 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
     override fun onRefresh() {
         swipe_refresh.isRefreshing = false
         responseViewModel!!.getCountryFeature()
+
     }
 
     private fun showError(showError: Boolean) {
         if (showError) {
-            Toast.makeText(
-                CountryFeatureApplication.context,
-                "Please try again!!! Check internet connection.",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            if (NetworkConnection.isNetworkConnected()) {
+                Toast.makeText(
+                    CountryFeatureApplication.context,
+                    "Please try again!!!",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } else {
+                showInternetError()
+            }
         }
     }
 
@@ -81,9 +86,7 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            if (!mDialog.isShowing) {
-                showProgressDialog()
-            }
+            showProgressDialog()
         } else {
             hideLoading()
         }
@@ -98,6 +101,15 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
     //Function to show title in action bar
     private fun showTitle(title: String) {
         supportActionBar!!.title = title
+    }
+
+    private fun showInternetError() {
+        Toast.makeText(
+            CountryFeatureApplication.context,
+            "Check internet connection, Please try again!!!",
+            Toast.LENGTH_SHORT
+        )
+            .show()
     }
 
 }

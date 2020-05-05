@@ -15,18 +15,18 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_5"
+        android:layout_margin="@dimen/country_feature_card_margin"
         android:background="@drawable/card_gtradient"
         android:elevation="3dp"
-        android:paddingHorizontal="@dimen/dimen_5"
-        android:paddingVertical="@dimen/dimen_5"
-        app:cardCornerRadius="@dimen/dimen_5">
+        android:paddingHorizontal="@dimen/country_feature_card_margin"
+        android:paddingVertical="@dimen/country_feature_card_margin"
+        app:cardCornerRadius="@dimen/country_feature_card_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dimen_10"
-            android:layout_marginVertical="@dimen/dimen_10"
+            android:layout_marginHorizontal="@dimen/country_feature_margin"
+            android:layout_marginVertical="@dimen/country_feature_margin"
             android:orientation="horizontal"
             android:weightSum="10">
 
@@ -35,25 +35,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:orientation="vertical"
-                android:layout_marginEnd="@dimen/dimen_5"
-                android:layout_marginRight="@dimen/dimen_5">
+                android:layout_marginEnd="@dimen/country_feature_card_margin"
+                android:layout_marginRight="@dimen/country_feature_card_margin">
 
                 <TextView
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10"
+                    android:layout_marginTop="@dimen/country_feature_margin"
                     android:text="@{countryFeatureViewModel.title!=null?countryFeatureViewModel.title:`No Title`}"
-                    android:textSize="@dimen/textsize_12"
+                    android:textSize="@dimen/title_text_size"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_10"
+                    android:layout_marginTop="@dimen/country_feature_margin"
                     android:text="@{countryFeatureViewModel.description!= null ? countryFeatureViewModel.description : `No Description`}"
-                    android:textSize="@dimen/textsize_10" />
+                    android:textSize="@dimen/description_textsize" />
             </LinearLayout>
 
             <ImageView

@@ -32,15 +32,9 @@ class ResponseViewModel : ViewModel {
         CountryFeatureUsecase(executorThread, uiThread)
 
     fun getCountryFeature(): MutableLiveData<ArrayList<CountryFeatureViewModel>> {
-        if (NetworkConnection.isNetworkConnected()) {
-            loadingError.value = false
-            loading.value = true
-            countryFeatureUsecase.execute(CountryFeatureSubscriber())
-        } else {
-            loading.value = false
-            loadingError.value = true
-        }
-
+        loadingError.value = false
+        loading.value = true
+        countryFeatureUsecase.execute(CountryFeatureSubscriber())
         return rowsLiveData
     }
 

@@ -18,7 +18,7 @@ class CountryFeatureAdapter(private val mCountryFeatureList: ArrayList<CountryFe
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(viewGroup.context)
         val countryFeatureBinding: CountryFeatureBinding =
-            DataBindingUtil.inflate(inflater, R.layout.country_frature_card, viewGroup, false)
+            DataBindingUtil.inflate(inflater, R.layout.country_feature_card, viewGroup, false)
 
         return ViewHolder(countryFeatureBinding)
     }
