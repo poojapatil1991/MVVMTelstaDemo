@@ -12,7 +12,7 @@ import com.example.telstrapoc.databinding.CountryFeatureBinding
 Adapter for country feature recycler view
  */
 
-class CountryFeatureAdapter(private val mCountryFeatureList: ArrayList<CountryFeatureViewModel>?) :
+class CountryFeatureAdapter(private var mCountryFeatureList: ArrayList<CountryFeatureViewModel>?) :
     RecyclerView.Adapter<CountryFeatureAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -42,5 +42,10 @@ class CountryFeatureAdapter(private val mCountryFeatureList: ArrayList<CountryFe
             countryFeatureBinding.executePendingBindings()
         }
 
+    }
+
+    fun setArrayList(arrayList: ArrayList<CountryFeatureViewModel>) {
+        mCountryFeatureList = arrayList
+        notifyDataSetChanged()
     }
 }

@@ -1,18 +1,17 @@
 package com.example.telstrapoc.countryFeature.view
 
+import android.content.Intent
+import androidx.appcompat.app.ActionBar
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.Assert.*
-import org.junit.Rule
 import androidx.test.rule.ActivityTestRule
 import com.example.telstrapoc.R
 import kotlinx.android.synthetic.main.content_country_feature.*
+import org.junit.*
 
 class CountryFeatureActivityTest {
 
@@ -52,6 +51,11 @@ class CountryFeatureActivityTest {
     @Test
     fun testRecyclerViewScrolling(){
         onView(withId(R.id.rv_country_feature)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+    @Test
+    fun testActionBarTitleDisplay(){
+        val actionBar: ActionBar?= mCountryFeatureActivity.supportActionBar
+        Assert.assertNotNull(actionBar!!.title)
     }
 
 }

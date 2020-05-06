@@ -24,7 +24,8 @@ Launcher Activity, Main activity to show country feature data on activity.
 class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
     SwipeRefreshLayout.OnRefreshListener {
 
-    private var countryFeatureAdapter: CountryFeatureAdapter? = null
+    private var countryFeatureAdapter: CountryFeatureAdapter =
+        CountryFeatureAdapter(ArrayList<CountryFeatureViewModel>())
     private var context: CountryFeatureActivity? = null
     private var responseViewModel: ResponseViewModel? = null
     private lateinit var mDialog: Dialog
@@ -41,41 +42,45 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
         mDialog.setCanceledOnTouchOutside(false)
 
         responseViewModel = ViewModelProviders.of(this).get(ResponseViewModel::class.java)
-        loadDataInRecyclerView()
-        responseViewModel!!.loadingError.observe(this, Observer { t: Boolean -> showError(t) })
+        rv_country_feature!!.layoutManager = LinearLayoutManager(context)
+        rv_country_feature!!.adapter = countryFeatureAdapter
+
+        responseViewModel!!.loadingError.observe(
+            this,
+            Observer { t: Boolean -> showError(t, "Please try again!!!") })
 
         responseViewModel!!.loading.observe(this, Observer { t: Boolean -> showLoading(t) })
         responseViewModel!!.titleLiveData.observe(this, Observer { t: String -> showTitle(t) })
+        responseViewModel!!.rowsLiveData
+            .observe(this, Observer { it: ArrayList<CountryFeatureViewModel> ->
+                countryFeatureAdapter.setArrayList(it)
+            })
+        loadDataInRecyclerView()
     }
 
     //Function to show country feature in recycler view
     private fun loadDataInRecyclerView() {
-        responseViewModel!!.getCountryFeature()
-            .observe(this, Observer { it: ArrayList<CountryFeatureViewModel> ->
-                countryFeatureAdapter = CountryFeatureAdapter(it)
-                rv_country_feature!!.layoutManager = LinearLayoutManager(context)
-                rv_country_feature!!.adapter = countryFeatureAdapter
-            })
+        if (NetworkConnection.isNetworkConnected()) {
+            responseViewModel!!.getCountryFeature()
+        } else {
+            showError(true, "Check your internet connection. Please try again!!!")
+        }
     }
 
     override fun onRefresh() {
         swipe_refresh.isRefreshing = false
-        responseViewModel!!.getCountryFeature()
-
+        loadDataInRecyclerView()
     }
 
-    private fun showError(showError: Boolean) {
+    private fun showError(showError: Boolean, message: String) {
         if (showError) {
-            if (NetworkConnection.isNetworkConnected()) {
-                Toast.makeText(
-                    CountryFeatureApplication.context,
-                    "Please try again!!!",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } else {
-                showInternetError()
-            }
+            Toast.makeText(
+                CountryFeatureApplication.context,
+                message,
+                Toast.LENGTH_SHORT
+            )
+                .show()
+
         }
     }
 
@@ -102,14 +107,4 @@ class CountryFeatureActivity : AppCompatActivity(), LifecycleOwner,
     private fun showTitle(title: String) {
         supportActionBar!!.title = title
     }
-
-    private fun showInternetError() {
-        Toast.makeText(
-            CountryFeatureApplication.context,
-            "Check internet connection, Please try again!!!",
-            Toast.LENGTH_SHORT
-        )
-            .show()
-    }
-
 }

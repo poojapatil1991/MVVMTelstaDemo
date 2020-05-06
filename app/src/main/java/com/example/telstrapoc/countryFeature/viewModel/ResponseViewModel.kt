@@ -31,11 +31,10 @@ class ResponseViewModel : ViewModel {
     private val countryFeatureUsecase: CountryFeatureUsecase =
         CountryFeatureUsecase(executorThread, uiThread)
 
-    fun getCountryFeature(): MutableLiveData<ArrayList<CountryFeatureViewModel>> {
+    fun getCountryFeature() {
         loadingError.value = false
         loading.value = true
         countryFeatureUsecase.execute(CountryFeatureSubscriber())
-        return rowsLiveData
     }
 
     /*
